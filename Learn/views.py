@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from django.http import HttpResponse
+import json
 
 # Create your views here.
 
@@ -15,4 +16,4 @@ class StudentViews(APIView):
             'msg': ''
         }
 
-        return HttpResponse()
+        return HttpResponse(json.dumps(res), status=201)
