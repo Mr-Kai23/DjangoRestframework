@@ -1,18 +1,25 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework.exceptions import AuthenticationFailed
 from django.http import HttpResponse
 import json
 
 # Create your views here.
 
+
 # 对用户Token的验证
 class TokenAuthentication:
-    def
+    def perform_authentication(self, request):
 
+        if not request._request.GET.get('token'):
+            raise AuthenticationFailed('用户没有登录！')
+
+        return
 
 
 # APIView 继承的 View
 class StudentViews(APIView):
+    authentication_classes = [TokenAuthentication]
 
     def get(self, request):
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
