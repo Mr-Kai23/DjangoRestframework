@@ -11,10 +11,17 @@ import json
 class TokenAuthentication:
     def perform_authentication(self, request):
 
-        if not request._request.GET.get('token'):
+        # 验证用户是否登录
+        # 也可以获取用户数据去数据库匹配验证
+        token = request._request.GET.get('token', None)
+
+        if not token:
             raise AuthenticationFailed('用户没有登录！')
 
-        return
+        return ('name', None)  # 可以将数据库的数据返回，比如用户名等
+
+    def authenticate_header(self, val):
+        pass
 
 
 # APIView 继承的 View
@@ -23,8 +30,8 @@ class StudentViews(APIView):
 
     def get(self, request):
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        self.dispatch()
-
+        # self.dispatch()
+        # print(request.user)  # 验证后返回的 name
         res = {
             'code': 1000,
             'msg': ''
