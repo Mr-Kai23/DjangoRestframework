@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.authentication import BaseAuthentication
 from django.http import HttpResponse
 import json
 
@@ -8,11 +9,31 @@ import json
 
 
 # 对用户Token的验证
-class TokenAuthentication:
+# 认证类最好继承BaseAuthentication
+class TokenAuthentication(BaseAuthentication):
     """
     认证可以返回三种类型的值
+
     """
+
+    www_authenticate_realm = 'api'
+
     def authenticate(self, request):
+        """
+        执行认证类的authenticate()方法
+            # 1.如果抛出异常，执行自身的_not_authenticated()
+            # 2.如果返回元组
+            # 3.返回None，我不管，下一个认证来处理
+        如果都返回None则，返回匿名用户
+            给user和auth赋默认值，user:匿名用户， auth
+
+        扩展：
+        在BasicAuthentication认证中，
+        如果不允许匿名用户，可以抛出 AuthenticationFailed 异常
+        此时浏览器会提供用户认证机制，弹出 用户名和密码框，然后把数据加密后传到服务器
+        :param request:
+        :return:
+        """
 
         # 验证用户是否登录
         # 也可以获取用户数据去数据库匹配验证
@@ -21,10 +42,15 @@ class TokenAuthentication:
         if not token:
             raise AuthenticationFailed('用户没有登录！')
 
-        return ('name', None)  # 可以将数据库的数据返回，比如用户名等
+        return ('用户', token)  # 将用户和token的元组返回，或返回None
 
-    def authenticate_header(self, val):
-        pass
+    def authenticate_header(self, request):
+        """
+        认证失败时，返回的响应头信息
+        :param val:
+        :return:
+        """
+        return 'Basic realm="api"' % self.www_authenticate_realm
 
 
 # APIView 继承的 View
