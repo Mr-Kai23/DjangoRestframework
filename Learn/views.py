@@ -12,7 +12,8 @@ import json
 # 认证类最好（必须）继承BaseAuthentication
 class TokenAuthentication(BaseAuthentication):
     """
-    认证可以返回三种类型的值
+    用户认证：
+    认证用户是否登录
 
     """
 
@@ -50,7 +51,7 @@ class TokenAuthentication(BaseAuthentication):
         :param request:
         :return:
         """
-        return 'Basic realm="api"' % self.www_authenticate_realm
+        return 'Basic realm="%s"' % self.www_authenticate_realm
 
 
 # APIView 继承的 View
@@ -65,7 +66,7 @@ class StudentViews(APIView):
 
     def get(self, request):
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        self.dispatch()
+        # self.dispatch()
         # print(request.user)  # 验证后返回的 name
         res = {
             'code': 1000,

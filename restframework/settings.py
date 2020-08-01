@@ -139,8 +139,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # restframework 的默认配置，可以在其中重新配置
+# 可以配置源码中 api_settings 中的配置属性
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['Learn.views.TokenAuthentication'],  # 验证类的路径
+    'DEFAULT_AUTHENTICATION_CLASSES': ['Learn.views.TokenAuthentication'],  # 列表中为验证类的路径
     'UNAUTHENTICATED_USER': lambda: '匿名用户',  # 当验证类返回None时，返回默认的匿名用户
     # 'UNAUTHENTICATED_USER': None  # 匿名用户时，设置request.user为None
     'UNAUTHENTICATED_TOKEN': None   # 匿名用户时，设置request.auth为None
