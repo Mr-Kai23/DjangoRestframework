@@ -36,6 +36,8 @@ class TokenAuthentication:
 
 
 class AuthView(APIView):
+
+    # 验证类名列表，可自定义验证类，但必须加入到列表中才有效
     authentication_classes = [TokenAuthentication]
 
     def post(self, request, *args, **kwargs):
