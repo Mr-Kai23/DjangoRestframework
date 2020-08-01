@@ -9,7 +9,7 @@ import json
 
 
 # 对用户Token的验证
-# 认证类最好继承BaseAuthentication
+# 认证类最好（必须）继承BaseAuthentication
 class TokenAuthentication(BaseAuthentication):
     """
     认证可以返回三种类型的值
@@ -47,7 +47,7 @@ class TokenAuthentication(BaseAuthentication):
     def authenticate_header(self, request):
         """
         认证失败时，返回的响应头信息
-        :param val:
+        :param request:
         :return:
         """
         return 'Basic realm="api"' % self.www_authenticate_realm
