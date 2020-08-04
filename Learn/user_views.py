@@ -2,6 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.throttling import BaseThrottle  # 阀值控制
 from Learn.models import User, Token
 
 
