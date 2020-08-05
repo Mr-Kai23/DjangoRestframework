@@ -1,8 +1,9 @@
 from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
 from Learn.models import User, Token
-from Authentications import TokenAuthentication
-from Permissions import SVIPPermission
+from utils.Authentications import TokenAuthentication
+from utils.Permissions import SVIPPermission
+from utils.Throttlings import VisitThrottle
 
 
 def md5(user):
@@ -35,11 +36,12 @@ class AuthView(APIView):
     # 局部使用验证：
     # 验证类名列表，可自定义验证类，但必须加入到列表中才有效
     authentication_classes = [TokenAuthentication]
+    throttle_classes = [VisitThrottle]
 
     def post(self, request, *args, **kwargs):
 
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        # self.dispatch()
+        self.dispatch()
         # print(request.user)  # 验证后返回的 name
 
         res = {
@@ -78,6 +80,7 @@ class OrderView(APIView):
 
     # SVIP权限
     permission_classes = [SVIPPermission]
+    throttle_classes = [VisitThrottle]
 
     def get(self, request, *args, **kwargs):
         return HttpResponse('')

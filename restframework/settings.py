@@ -139,9 +139,14 @@ STATIC_URL = '/static/'
 # restframework 的默认配置，可以在其中重新配置
 # 可以配置源码中 api_settings 中的配置属性
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': ['Authentications.TokenAuthentication'],  # 列表中为验证类的路径，全局配置
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ['utils.Authentications.TokenAuthentication'],  # 列表中为验证类的路径，全局配置
     'UNAUTHENTICATED_USER': lambda: '匿名用户',  # 当验证类返回None时，返回默认的匿名用户
     # 'UNAUTHENTICATED_USER': None  # 匿名用户时，设置request.user为None
     'UNAUTHENTICATED_TOKEN': None,  # 匿名用户时，设置request.auth为None
-    # 'DEFAULT_PERMISSION_CLASSES': ['Permissions.SVIPPermission']  # 权限类的路径，全局配置
+    # 'DEFAULT_PERMISSION_CLASSES': ['utils.Permissions.SVIPPermission'],  # 权限类的路径，全局配置
+    'DEFAULT_THROTTLE_CLASSES': ['utils.Throttlings.VisitThrottle'],
+    'DEFAULT_THROTTLE_RATES': {
+        '匿名用户（IP）': '3/m',  # m:分钟
+        '登录用户': '10/m',
+    }
 }
