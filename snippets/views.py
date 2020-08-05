@@ -235,11 +235,27 @@ class SnippetsListView1(mixins.ListModelMixin, mixins.CreateModelMixin, generics
     serializer_class = SnippetSerializer2
 
     def get(self, request, *args, **kwargs):
+        """
+        获取所有实例数据
+        :param request: 请求实例
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        # 调用例继承自ListModelMixin类中的list()方法获取
         return self.list(request, *args, **kwargs)  # 获取所有实例
 
     def post(self, request, *args, **kwargs):
+        """
+        创建新的实例数据
+        :param request: 请求实例
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        # 调用例继承自CreateModelMixin类中的create()方法创建
         return self.create(request, *args, **kwargs)  # 创建新的实例
 
 
@@ -252,13 +268,37 @@ class SnippetsDetailView1(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mi
     serializer_class = SnippetSerializer2
 
     def get(self, request, *args, **kwargs):
+        """
+        获取单个实例数据
+        :param request: 请求对象
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        # 调用例继承自RetrieveModelMixin类中的retrieve()方法获取
         return self.retrieve(request, *args, **kwargs)  # 获取单个实例
 
     def put(self, request, *args, **kwargs):
+        """
+        更新单个实例数据
+        :param request: 请求对象
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        # 调用例继承自UpdateModelMixin类中的update()方法更新
         return self.update(request, *args, **kwargs)  # 更新
 
     def delete(self, request, *args, **kwargs):
+        """
+        删除单个实例数据
+        :param request: 请求对象
+        :param args:
+        :param kwargs:
+        :return:
+        """
 
+        # 调用例继承自DestroyModelMixin类中的destroy()方法删除
         return self.destroy(request, *args, **kwargs)  # 删除
