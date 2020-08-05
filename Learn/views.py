@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from Authentications import TokenAuthentication
-from Perssions import SVIPPermission
+from Permissions import SVIPPermission
 from django.http import HttpResponse
 import json
 

@@ -2,7 +2,7 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.views import APIView
 from Learn.models import User, Token
 from Authentications import TokenAuthentication
-from Perssions import SVIPPermission
+from Permissions import SVIPPermission
 
 
 def md5(user):

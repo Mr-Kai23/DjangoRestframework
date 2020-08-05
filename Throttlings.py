@@ -19,6 +19,7 @@ class VisitThrottle(BaseThrottle):
         :param view:
         :return:
         """
+        # 访问用户IP
         remote_addr = request.META.get('REMOTE_ADDR')
         curtime = time.time()
 
@@ -46,6 +47,9 @@ class VisitThrottle(BaseThrottle):
         需等待多久才能访问
         :return:
         """
+        ctime = time.time()
+
+        return 60-(ctime-self.history[0])
 
 
 
