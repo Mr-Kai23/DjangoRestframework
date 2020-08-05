@@ -302,3 +302,20 @@ class SnippetsDetailView1(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mi
 
         # 调用例继承自DestroyModelMixin类中的destroy()方法删除
         return self.destroy(request, *args, **kwargs)  # 删除
+
+
+class SnippetsListView2(generics.ListCreateAPIView):
+
+    """
+    列出所有的snippets或者创建一个新的snippet。
+    """
+    queryset = Snippets.objects.all()
+    serializer_class = SnippetSerializer2
+
+
+class SnippetsDetailView2(generics.RetrieveUpdateDestroyAPIView):
+    """
+    检索，更新或删除一个snippet示例。
+    """
+    queryset = Snippets.objects.all()
+    serializer_class = SnippetSerializer2
