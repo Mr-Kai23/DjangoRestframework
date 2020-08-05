@@ -36,14 +36,14 @@ class SnippetSerializer(serializers.Serializer):
     style = serializers.ChoiceField(choices=STYLE_CHOICES, default='friendly')
 
     # create()和update()方法定义了在调用serializer.save()时如何创建和修改完整的实例
-    # post 请求会执行
+    # post 请求会执行增加方法
     def create(self, validated_data):
         """
         根据提供的验证过的数据创建并返回一个新的`Snippet`实例。
         """
         return Snippets.objects.create(**validated_data)
 
-    # patch/put 请求会执行
+    # patch/put 请求会执行的更新方法
     def update(self, instance, validated_data):
         """
         根据提供的验证过的数据更新和返回一个已经存在的`Snippet`实例。

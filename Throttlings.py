@@ -1,5 +1,5 @@
 import time
-from rest_framework.throttling import BaseThrottle
+from rest_framework.throttling import BaseThrottle  # 阀值控制
 from collections import defaultdict
 
 VISIT_RECORD = defaultdict(list)
