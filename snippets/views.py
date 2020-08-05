@@ -5,7 +5,6 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from rest_framework.views import APIView
 from django.views.decorators.csrf import csrf_exempt
 from snippets.models import Snippets
 from snippets.serializers import SnippetSerializer, SnippetSerializer2
@@ -156,6 +155,9 @@ def snippet_detail(request, pk, format=None):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+from rest_framework.views import APIView
+
+
 class SnippetsListView(APIView):
     """
     列出所有的snippets或者创建一个新的snippet。
@@ -184,7 +186,7 @@ class SnippetsDetailView(APIView):
     """
     检索，更新或删除一个snippet示例。
     """
-    def get_obj(self, pk):
+    def get_object(self, pk):
         try:
             snippet = Snippets.objects.get(pk=pk)
 
@@ -193,14 +195,15 @@ class SnippetsDetailView(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        snippet = self.get_obj(pk)
+        snippet = self.get_object(pk)
         serializer = SnippetSerializer2(snippet)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk, format=None):
-        data = JSONParser().parse(request)
-        snippet = self.get_obj(pk)
+        # data = JSONParser().parse(request)
+        data = request.data
+        snippet = self.get_object(pk)
         serializer = SnippetSerializer2(snippet, data=data)
 
         if serializer.is_valid():
@@ -211,9 +214,51 @@ class SnippetsDetailView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        snippet = self.get_obj(pk)
+        snippet = self.get_object(pk)
 
         snippet.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+from rest_framework import mixins, generics
+
+
+# 继承前两个类后，必须继承第三个类
+class SnippetsListView1(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    """
+    列出所有的snippets或者创建一个新的snippet。
+    """
+
+    # 变量名不能变
+    queryset = Snippets.objects.all()
+    serializer_class = SnippetSerializer2
+
+    def get(self, request, *args, **kwargs):
+
+        return self.list(request, *args, **kwargs)  # 获取所有实例
+
+    def post(self, request, *args, **kwargs):
+
+        return self.create(request, *args, **kwargs)  # 创建新的实例
+
+
+class SnippetsDetailView1(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
+                          generics.GenericAPIView):
+    """
+    检索，更新或删除一个snippet示例。
+    """
+    queryset = Snippets.objects.all()
+    serializer_class = SnippetSerializer2
+
+    def get(self, request, *args, **kwargs):
+
+        return self.retrieve(request, *args, **kwargs)  # 获取单个实例
+
+    def put(self, request, *args, **kwargs):
+
+        return self.update(request, *args, **kwargs)  # 更新
+
+    def delete(self, request, *args, **kwargs):
+
+        return self.destroy(request, *args, **kwargs)  # 删除
