@@ -77,10 +77,9 @@ class OrderView(APIView):
     """
     订单视图
     """
-
-    # SVIP权限
-    permission_classes = [SVIPPermission]
-    throttle_classes = [VisitThrottle]
+    # 局部应用
+    permission_classes = [SVIPPermission]  # SVIP权限
+    throttle_classes = [VisitThrottle]  # 访问频率
 
     def get(self, request, *args, **kwargs):
         return HttpResponse('')

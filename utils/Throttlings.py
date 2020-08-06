@@ -63,6 +63,7 @@ class VisitThrottle2(SimpleRateThrottle):
     """
     访问评率控制
     """
+    # 访问频率的键值
     scope = '用户（IP）'
 
     def get_cache_key(self, request, view):
