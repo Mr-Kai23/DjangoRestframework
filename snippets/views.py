@@ -312,6 +312,9 @@ class SnippetsListView2(generics.ListCreateAPIView):
     queryset = Snippets.objects.all()
     serializer_class = SnippetSerializer2
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class SnippetsDetailView2(generics.RetrieveUpdateDestroyAPIView):
     """

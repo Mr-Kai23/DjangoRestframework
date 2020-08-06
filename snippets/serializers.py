@@ -3,6 +3,7 @@
 # 实例序列化和反序列化为诸如json之类的表示形式的方式
 # 可以通过声明与Django forms非常相似的序列化器（serializers）来实现
 from rest_framework import serializers
+from django.contrib.auth.models import User
 # 序列化为 JSON格式（字节串）
 from rest_framework.renderers import JSONRenderer
 # 要通过 BytesIO 将 JSON格式（字节串）包装，才能用JSONParser解析
@@ -63,8 +64,30 @@ class SnippetSerializer(serializers.Serializer):
 #   一组自动确定的字段。
 #   默认简单实现的create()和update()方法
 class SnippetSerializer2(serializers.ModelSerializer):
+    """
+    Snippets序列化类
+    """
 
     class Meta:
         model = Snippets  # 关联的模型
         # 需要序列化的字段
         fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
+
+
+class UserSerializer(serializers.ModelSerializer):
+    """
+    用户序列化类
+    """
+    # 代码片段和创建它们的用户相关联
+    # source参数控制哪个属性用于填充字段，并且可以指向序列化实例上的任何属性
+    # 无类型的ReadOnlyField始终是只读的，只能用于序列化表示，不能用于在反序列化时更新模型实例
+    # 可以在这里使用CharField(read_only=True)。
+    # owner = serializers.CharField(read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    # 用户管关联到的代码片段
+    snippets = serializers.PrimaryKeyRelatedField(many=True, queryset=Snippets.objects.all())
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'snippets')
