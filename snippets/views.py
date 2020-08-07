@@ -322,3 +322,25 @@ class SnippetsDetailView2(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Snippets.objects.all()
     serializer_class = SnippetSerializer2
+
+
+from rest_framework import renderers
+
+
+class SnippetsHighlightView(generics.GenericAPIView):
+    """
+    代码高亮显示视图
+    """
+    queryset = Snippets.objects.all()
+
+    # 用来渲染的类
+    renderer_classes = [renderers.StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        # 通过queryset查找出实例
+        snippet = self.get_object()
+
+        # 不是返回对象实例，而是返回对象实例的高亮的属性
+        return Response(snippet.highlighted)
+
+

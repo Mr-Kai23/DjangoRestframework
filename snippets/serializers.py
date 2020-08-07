@@ -74,6 +74,29 @@ class SnippetSerializer2(serializers.ModelSerializer):
         fields = ('id', 'title', 'code', 'linenos', 'language', 'style')
 
 
+# 实体之间使用超链接方式。这样的话，我们需要修改我们的序列化程序来扩展HyperlinkedModelSerializer
+# 而不是现有的ModelSerializer。
+# HyperlinkedModelSerializer与ModelSerializer有以下区别：
+#   默认情况下不包括id字段。
+#   它包含一个url字段，使用HyperlinkedIdentityField。
+#   关联关系使用HyperlinkedRelatedField，而不是PrimaryKeyRelatedField
+class SnippetsSerializer3(serializers.HyperlinkedModelSerializer):
+    """
+    代码片段序列化
+    """
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    # 定义用户信息中highlight字段为超链接字段，关联到snippet-highlight视图，高亮显示
+    # 因为我们已经包含了格式后缀的URL，例如'.json'，我们还需要在highlight字段上指出任何格式后缀的超链接，
+    # 它应该使用'.html'后缀。
+    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
+
+    class Meta:
+        model = Snippets
+        fields = ('url', 'id', 'highlight', 'owner',
+                  'title', 'code', 'linenos', 'language', 'style')
+
+
 class UserSerializer(serializers.ModelSerializer):
     """
     用户序列化类
@@ -91,3 +114,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'snippets')
+
+
+class UserSerializer2(serializers.HyperlinkedModelSerializer):
+    """
+    用户序列化
+    """
+    # 定义用户信息中snippets字段为超链接字段，关联到snippet-detail视图
+    # view_name:关联的视图
+    snippets = serializers.HyperlinkedRelatedField(view_name='snippet-detail', many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('url', 'id', 'username', 'snippets')
