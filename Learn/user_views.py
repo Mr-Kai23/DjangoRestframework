@@ -41,7 +41,7 @@ class AuthView(APIView):
     def post(self, request, *args, **kwargs):
 
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        # self.dispatch()
+        self.dispatch()
         # print(request.user)  # 验证后返回的 name
 
         res = {
