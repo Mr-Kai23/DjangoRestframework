@@ -148,5 +148,6 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         '匿名用户（IP）': '3/m',  # m:分钟
         '登录用户': '10/m',
-    }
+    },
+    'PAGE_SIZE': 10,  # 添加分页
 }

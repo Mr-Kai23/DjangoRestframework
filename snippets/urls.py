@@ -10,7 +10,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
 
-    url(r'^api/v1/$', api_views.api_root),
+    url(r'^$', api_views.api_root),
 
     url(r'^api/v1/user/$', user_views.UserListView.as_view(), name='user-list'),
     url(r'^api/v1/user/detail/(?P<pk>[1-9]+)/$', user_views.UserDetailView.as_view(), name='user-detail'),

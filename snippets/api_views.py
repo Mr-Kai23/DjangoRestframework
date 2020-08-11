@@ -13,10 +13,10 @@ def api_root(request, format=None):
     URL模式是通过方便的名称来标识的
     :param request:
     :param format:
-    :return:
+    :return: 返回Json格式数据，键值为users和snippets,值为user-list与snippet-list的路由
     """
 
     return Response({
         'users': reverse('user-list', request=request, format=format),
-        'snippets': reverse('snippets-list', request=request, format=format)
+        'snippets': reverse('snippet-list', request=request, format=format)
     })

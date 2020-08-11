@@ -102,7 +102,7 @@ class UserSerializer(serializers.ModelSerializer):
     用户序列化类
     """
     # 代码片段和创建它们的用户相关联
-    # source参数控制哪个属性用于填充字段，并且可以指向序列化实例上的任何属性
+    # source参数控制哪个属性用于填充字段（相当于外键关联），并且可以指向序列化实例上的任何属性
     # 无类型的ReadOnlyField始终是只读的，只能用于序列化表示，不能用于在反序列化时更新模型实例
     # 可以在这里使用CharField(read_only=True)。
     # owner = serializers.CharField(read_only=True)
