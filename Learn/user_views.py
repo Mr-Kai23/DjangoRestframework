@@ -122,6 +122,12 @@ class UserView(APIView):
 
         return HttpResponse('用户信息')
 
+    def post(self, request, *args, **kwargs):
+        print(request._request)
+        from django.core.handlers.wsgi import WSGIRequest
+
+        return HttpResponse('Post和Body')
+
 
 class OrderView(APIView):
     """

@@ -20,7 +20,7 @@ class StudentViews(APIView):
 
     def get(self, request):
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        # self.dispatch()
+        self.dispatch()
         # print(request.user)  # 验证后返回的 name
         res = {
             'code': 1000,
@@ -40,3 +40,25 @@ class StudentViews(APIView):
     def delete(self, request):
 
         return HttpResponse('删除Student')
+
+
+from rest_framework.parsers import JSONParser, FormParser
+from rest_framework.request import Request
+
+
+class ParseView(APIView):
+    """
+    允许发送Json格式数据
+      a.content-type；application/json
+      b.{'name': 'alex', 'age': 25}
+    """
+    # JSONParser: 表示只能解析content-type；application/json
+    # FormParser: 表示只能解析content-type；application/x-www-form-urlencoded
+    parser_classes = [JSONParser, FormParser]
+
+    def post(self, request, *args, **kwargs):
+
+        # 只有获取请求中数据时才会去执行解析器
+        print(request.data)
+
+        return HttpResponse('请求数据')
