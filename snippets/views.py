@@ -21,72 +21,74 @@ class JSONResponse(HttpResponse):
         super(JSONResponse, self).__init__(content, **kwargs)
 
 
-# @csrf_exempt
-# def snippet_list(request):
-#     """
-#     列出所有的code snippet，或创建一个新的snippet。
-#     """
-#     if request.method == 'GET':
-#         snippets = Snippets.objects.all()
-#
-#         # 将 queryset 序列化后返回给用户，serializer.data是一个OrderedDict()
-#         # 将 单个实例 序列化后返回给用户，serializer.data是一个Dict()
-#         serializer = SnippetSerializer2(snippets, many=True)
-#
-#         return JSONResponse(serializer.data)
-#
-#     elif request.method == 'POST':
-#         # JSON直接解析请求对象得到数据
-#         data = JSONParser().parse(request)
-#         # 将数据序列化，并验证
-#         serializer = SnippetSerializer2(data=data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#             return JSONResponse(serializer.data, status=201)
-#
-#         return JSONResponse(serializer.errors, status=400)
-#
-#
-# @csrf_exempt
-# def snippet_detail(request, pk):
-#     """
-#     获取、删除或更新一个snippet实例
-#     :param request: 请求对象
-#     :param pk: id主键
-#     :return:
-#     """
-#     try:
-#         snippet = Snippets.objects.get(pk=pk)
-#     except Snippets.DoesNotExist:
-#         return HttpResponse(status=404)
-#
-#     if request.method == 'GET':
-#         serializer = SnippetSerializer2(snippet)
-#
-#         return JSONResponse(serializer.data, status=201)
-#
-#     elif request.method == 'PUT':
-#         # 从请求中解析出数据进行修改
-#         data = JSONParser().parse(request)
-#         serializer = SnippetSerializer2(snippet, data=data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#
-#             return JSONResponse(serializer.data)
-#
-#         return JSONResponse(serializer.errors, status=400)
-#
-#     elif request.method == 'DELETE':
-#         snippet.delete()
-#
-#         return HttpResponse(status=204)
+# 1.数据直接返回json
+@csrf_exempt
+def snippet_list(request):
+    """
+    列出所有的code snippet，或创建一个新的snippet。
+    """
+    if request.method == 'GET':
+        snippets = Snippets.objects.all()
+
+        # 将 queryset 序列化后返回给用户，serializer.data是一个OrderedDict()
+        # 将 单个实例 序列化后返回给用户，serializer.data是一个Dict()
+        serializer = SnippetSerializer2(snippets, many=True)
+
+        return JSONResponse(serializer.data)
+
+    elif request.method == 'POST':
+        # JSON直接解析请求对象得到数据
+        data = JSONParser().parse(request)
+        # 将数据序列化，并验证
+        serializer = SnippetSerializer2(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return JSONResponse(serializer.data, status=201)
+
+        return JSONResponse(serializer.errors, status=400)
 
 
 @csrf_exempt
+def snippet_detail(request, pk):
+    """
+    获取、删除或更新一个snippet实例
+    :param request: 请求对象
+    :param pk: id主键
+    :return:
+    """
+    try:
+        snippet = Snippets.objects.get(pk=pk)
+    except Snippets.DoesNotExist:
+        return HttpResponse(status=404)
+
+    if request.method == 'GET':
+        serializer = SnippetSerializer2(snippet)
+
+        return JSONResponse(serializer.data, status=201)
+
+    elif request.method == 'PUT':
+        # 从请求中解析出数据进行修改
+        data = JSONParser().parse(request)
+        serializer = SnippetSerializer2(snippet, data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+
+            return JSONResponse(serializer.data)
+
+        return JSONResponse(serializer.errors, status=400)
+
+    elif request.method == 'DELETE':
+        snippet.delete()
+
+        return HttpResponse(status=204)
+
+
+# 2.数据返回显示在rest_framework后台框架页面中
+@csrf_exempt
 @api_view(['GET', 'POST'])  # api视图装饰器
-def snippet_list(request, format=None):
+def snippet_list1(request, format=None):
     """
     列出所有的code snippet，或创建一个新的snippet。
     """
@@ -119,7 +121,7 @@ def snippet_list(request, format=None):
 # 更新urls.py文件，给现有的URL后面添加一组format_suffix_patterns
 @csrf_exempt
 @api_view(['GET', 'PUT', 'DELETE'])
-def snippet_detail(request, pk, format=None):
+def snippet_detail1(request, pk, format=None):
     """
     获取、删除或更新一个snippet实例
     :param request: 请求对象
@@ -158,16 +160,19 @@ def snippet_detail(request, pk, format=None):
 from rest_framework.views import APIView
 
 
+# 3.CBV继承APIView实现
 class SnippetsListView(APIView):
     """
     列出所有的snippets或者创建一个新的snippet。
     """
+    # 获取所有信息
     def get(self, request, format=None):
         snippets = Snippets.objects.all()
         serializer = SnippetSerializer2(snippets, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # 创建
     def post(self, request, format=None):
         # JSON直接解析请求对象得到数据
         data = JSONParser().parse(request)
@@ -186,6 +191,7 @@ class SnippetsDetailView(APIView):
     """
     检索，更新或删除一个snippet示例。
     """
+    # 更具id获取到实例
     def get_object(self, pk):
         try:
             snippet = Snippets.objects.get(pk=pk)
@@ -194,12 +200,14 @@ class SnippetsDetailView(APIView):
         except Snippets.DoesNotExist:
             raise Http404
 
+    # 单个实例的数据信息
     def get(self, request, pk, format=None):
         snippet = self.get_object(pk)
         serializer = SnippetSerializer2(snippet)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    # 修改更新
     def put(self, request, pk, format=None):
         # data = JSONParser().parse(request)
         data = request.data
@@ -213,6 +221,7 @@ class SnippetsDetailView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    # 删除
     def delete(self, request, pk, format=None):
         snippet = self.get_object(pk)
 
@@ -221,11 +230,15 @@ class SnippetsDetailView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+# 4.CBV实现，直接继承多个实现单个具体功能的类
+# ListModelMixin：展示
+# CreateModelMixin：创建
 from rest_framework import mixins, generics
 
 
 # 继承前两个类后，必须继承第三个类
-class SnippetsListView1(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+class SnippetsListView1(mixins.ListModelMixin, mixins.CreateModelMixin,
+                        generics.GenericAPIView):
     """
     列出所有的snippets或者创建一个新的snippet。
     """
@@ -259,6 +272,9 @@ class SnippetsListView1(mixins.ListModelMixin, mixins.CreateModelMixin, generics
         return self.create(request, *args, **kwargs)  # 创建新的实例
 
 
+# RetrieveModelMixin：单个实例显示
+# UpdateModelMixin：更新
+# DestroyModelMixin：删除
 class SnippetsDetailView1(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin,
                           generics.GenericAPIView):
     """
@@ -304,6 +320,8 @@ class SnippetsDetailView1(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mi
         return self.destroy(request, *args, **kwargs)  # 删除
 
 
+# 5.CBV实现，直接继承单个实现多个具体功能的类
+# ListCreateAPIView：展示和创建
 class SnippetsListView2(generics.ListCreateAPIView):
 
     """
@@ -316,6 +334,7 @@ class SnippetsListView2(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+# RetrieveUpdateDestroyAPIView：单个显示、更新和删除
 class SnippetsDetailView2(generics.RetrieveUpdateDestroyAPIView):
     """
     检索，更新或删除一个snippet示例。

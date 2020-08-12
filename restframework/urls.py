@@ -47,4 +47,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('snippets/', include('snippets.urls')),
     path('quickstart/', include('quickstart.urls')),
+    path('learn/', include('Learn.urls'))
 ]

@@ -139,15 +139,27 @@ STATIC_URL = '/static/'
 # restframework 的默认配置，可以在其中重新配置
 # 可以配置源码中 api_settings 中的配置属性
 REST_FRAMEWORK = {
-    # 'DEFAULT_AUTHENTICATION_CLASSES': ['utils.Authentications.TokenAuthentication'],  # 列表中为验证类的路径，全局配置
+
+    # 全局配置认证处理类（路径）
+    # 'DEFAULT_AUTHENTICATION_CLASSES': ['utils.Authentications.TokenAuthentication'],
     'UNAUTHENTICATED_USER': lambda: '匿名用户',  # 当验证类返回None时，返回默认的匿名用户
     # 'UNAUTHENTICATED_USER': None  # 匿名用户时，设置request.user为None
     'UNAUTHENTICATED_TOKEN': None,  # 匿名用户时，设置request.auth为None
-    # 'DEFAULT_PERMISSION_CLASSES': ['utils.Permissions.SVIPPermission'],  # 权限类的路径，全局配置
+
+    # 全局配置权限处理类（路径）
+    # 'DEFAULT_PERMISSION_CLASSES': ['utils.Permissions.SVIPPermission'],
+
+    # 全局配置节流处理类（路径）
     'DEFAULT_THROTTLE_CLASSES': ['utils.Throttlings.VisitThrottle'],
     'DEFAULT_THROTTLE_RATES': {
         '匿名用户（IP）': '3/m',  # m:分钟
         '登录用户': '10/m',
     },
+
     'PAGE_SIZE': 10,  # 添加分页
+
+    # 配置版本处理类参数
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1', 'v2'],  # 允许的版本号
+    'VERSION_PARAM': 'version',  # 版本参数的名字
 }

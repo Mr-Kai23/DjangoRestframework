@@ -12,7 +12,21 @@ class User(models.Model):
     password = models.CharField(max_length=25)
     user_type = models.SmallIntegerField(choices=USER_TYPE)
 
+    group = models.ForeignKey('UserGroup', on_delete=models.CASCADE)
+    roles = models.ManyToManyField('Role')
+
 
 class Token(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     token = models.CharField(max_length=50)
+
+
+class UserGroup(models.Model):
+    title = models.CharField(max_length=32)
+
+
+class Role(models.Model):
+    title = models.CharField(max_length=32)
+
+
+

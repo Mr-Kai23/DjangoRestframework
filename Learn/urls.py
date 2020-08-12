@@ -3,6 +3,8 @@ from Learn import views, user_views
 
 urlpatterns = [
 
-    url(r'^api/v1/auth/$', user_views.snippet_list, name='snippet-list'),
+    # url(r'^api/user/$', user_views.UserView.as_view(), name='user-list'),
+
+    url(r'^api/(?P<version>[v1|v2]+)/user/$', user_views.UserView.as_view(), name='user-list'),
 
 ]

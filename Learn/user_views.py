@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpResponse
+from django.urls import reverse
 from rest_framework.views import APIView
 from Learn.models import User, Token
 from utils.Authentications import TokenAuthentication
@@ -41,7 +42,7 @@ class AuthView(APIView):
     def post(self, request, *args, **kwargs):
 
         # # 源码阅读从dispatch()开始，将原始request丰富了新的属性，在属性中进行了用户验证
-        self.dispatch()
+        # self.dispatch()
         # print(request.user)  # 验证后返回的 name
 
         res = {
@@ -71,6 +72,55 @@ class AuthView(APIView):
             print(e)
 
         return JsonResponse(res)
+
+
+from rest_framework.request import Request
+from rest_framework.versioning import BaseVersioning, QueryParameterVersioning, URLPathVersioning
+
+
+class ParamVersion(BaseVersioning):
+    """
+    自定义版本处理类
+    """
+    def determine_version(self, request, *args, **kwargs):
+
+        version = request.query_params.get('version', None)
+
+        return version
+
+
+class UserView(APIView):
+    """
+    用户视图
+    """
+
+    # 自定义版本处理类的配置
+    # versioning_class = ParamVersion
+
+    # 已有的版本处理类
+    # 从请求路由参数中获取版本 http://127.0.0.1:8800/learn/user/?version=v1
+    # versioning_class = QueryParameterVersioning
+    # 推荐使用从请求路由参数中获取版本 http://127.0.0.1:8800/learn/v1/user/
+    versioning_class = URLPathVersioning
+
+    def get(self, request, *args, **kwargs):
+        # self.dispatch()
+        # version = request._request.GET.get('version', None)
+        # version = request.query_params.get('version', None)
+
+        print(request.version)
+        # 获取版本处理的对象
+        print(request.versioning_scheme)
+
+        # 根据视图名，反向生成url， request中可以获取到version参数，所有不用传version
+        url = request.versioning_scheme.reverse(viewname='user-list', request=request)
+        print(url)
+
+        # 要加上version参数
+        url2 = reverse(viewname='user-list', kwargs={'version': 1})
+        print(url2)
+
+        return HttpResponse('用户信息')
 
 
 class OrderView(APIView):
