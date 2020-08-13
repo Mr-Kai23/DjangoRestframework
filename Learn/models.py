@@ -15,18 +15,30 @@ class User(models.Model):
     group = models.ForeignKey('UserGroup', on_delete=models.CASCADE)
     roles = models.ManyToManyField('Role')
 
+    class Meta:
+        db_table = 'User'
+
 
 class Token(models.Model):
     user = models.OneToOneField(to=User, on_delete=models.CASCADE)
     token = models.CharField(max_length=50)
 
+    class Meta:
+        db_table = 'token'
+
 
 class UserGroup(models.Model):
     title = models.CharField(max_length=32)
 
+    class Meta:
+        db_table = 'user_group'
+
 
 class Role(models.Model):
     title = models.CharField(max_length=32)
+
+    class Meta:
+        db_table = 'role'
 
 
 

@@ -1,6 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from django.urls import reverse
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from Learn.models import User, Token
 from utils.Authentications import TokenAuthentication
 from utils.Permissions import SVIPPermission
@@ -129,13 +131,17 @@ class UserView(APIView):
         return HttpResponse('Post和Body')
 
 
-class OrderView(APIView):
-    """
-    订单视图
-    """
-    # 局部应用
-    permission_classes = [SVIPPermission]  # SVIP权限
-    throttle_classes = [VisitThrottle]  # 访问频率
+from .serializers import UserInfoSerializer
 
+
+class UserInfoView(APIView):
+    """
+    用户信息视图
+    """
     def get(self, request, *args, **kwargs):
-        return HttpResponse('')
+
+        users = User.objects.all()
+
+        serializer = UserInfoSerializer(instance=users, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
