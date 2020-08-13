@@ -162,4 +162,7 @@ REST_FRAMEWORK = {
     'DEFAULT_VERSION': 'v1',
     'ALLOWED_VERSIONS': ['v1', 'v2'],  # 允许的版本号
     'VERSION_PARAM': 'version',  # 版本参数的名字
+
+    # 配置解析器处理类（路径）
+    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser', 'rest_framework.parsers.FormParser']
 }

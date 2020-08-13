@@ -62,7 +62,7 @@ class TokenAuthentication(BaseAuthentication):
         执行认证类的authenticate()方法
             # 1.如果抛出异常，执行自身的_not_authenticated()
             # 2.如果返回元组
-            # 3.返回None，我不管，下一个认证来处理
+            # 3.返回None，我不管，循环下一个认证来处理
         如果都返回None则，返回匿名用户
             给user和auth赋默认值，user:匿名用户， auth
 

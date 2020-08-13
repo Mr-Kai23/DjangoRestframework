@@ -42,7 +42,7 @@ class StudentViews(APIView):
         return HttpResponse('删除Student')
 
 
-from rest_framework.parsers import JSONParser, FormParser
+from rest_framework.parsers import JSONParser, FormParser, FileUploadParser
 from rest_framework.request import Request
 
 
@@ -52,9 +52,12 @@ class ParseView(APIView):
       a.content-type；application/json
       b.{'name': 'alex', 'age': 25}
     """
+    # 可以在settings中全局配置
     # JSONParser: 表示只能解析content-type；application/json
     # FormParser: 表示只能解析content-type；application/x-www-form-urlencoded
-    parser_classes = [JSONParser, FormParser]
+    # parser_classes = [JSONParser, FormParser]
+    # 如果全局配置JSONParser, FormParser，单个视图要上传文件，可以单独定义parser_classes
+    parser_classes = [FileUploadParser]
 
     def post(self, request, *args, **kwargs):
 
