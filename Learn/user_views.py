@@ -131,17 +131,27 @@ class UserView(APIView):
         return HttpResponse('Post和Body')
 
 
-from .serializers import UserInfoSerializer
+from .serializers import UserInfoSerializer, UserInfoSerializer2
+import json
 
 
 class UserInfoView(APIView):
     """
     用户信息视图
     """
+    # serializer.data: 源码入口
+
     def get(self, request, *args, **kwargs):
 
         users = User.objects.all()
 
-        serializer = UserInfoSerializer(instance=users, many=True)
+        # 当序列化用了HyperlinkedIdentityField时，序列化时需要加上，context参数:传入请求对象
+        # 当many=True时，源码内部将queryset交给 ListSerializer类 处理
+        serializer = UserInfoSerializer2(instance=users, many=True, context={'request': request})
+        # serializer = UserInfoSerializer(instance=users, many=True)
 
+        #  # ensure_ascii=False，关闭自动将中文转码
+        ret = json.dumps(serializer.data, ensure_ascii=False)
+
+        # return HttpResponse(ret)
         return Response(serializer.data, status=status.HTTP_200_OK)
