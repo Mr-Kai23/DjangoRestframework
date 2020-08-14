@@ -36,7 +36,7 @@ class GroupView(APIView):
         """
         serializer = GroupSerializer(data=request.data)
 
-        if serializer.is_valid():
+        if serializer.is_valid():  # 钩子函数的入口
             serializer.save()
 
             return Response(serializer.validated_data, status=status.HTTP_201_CREATED)

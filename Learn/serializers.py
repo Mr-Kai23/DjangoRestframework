@@ -2,6 +2,10 @@
 from rest_framework import serializers
 from .models import UserGroup, Role, User
 
+# 序列化：
+# 1.序列化数据
+# 2.对数据进行验证
+
 
 class RoleSerializer(serializers.Serializer):
     """
@@ -103,11 +107,15 @@ class UserInfoSerializer2(serializers.ModelSerializer):
         # depth = 1
 
 
+from .validators import PasswordValidator
+
+
 class GroupSerializer(serializers.Serializer):
     """
     Serializer 分组序列化
     """
-    title = serializers.CharField(required=True)
+    # validators: 自定义验证规则
+    title = serializers.CharField(error_messages={'required': '标题不能为空！'}, validators=[PasswordValidator('老男人')])  # 数据校验
 
 
 class GroupSerializer2(serializers.ModelSerializer):
