@@ -102,7 +102,8 @@ class Pager1View(APIView):
         # serializer = RoleSerializer(instance=pager_roles, many=True)
         serializer = RoleSerializer2(instance=pager_roles, many=True)
 
+        # return Response(data=serializer.data)
+
         # 返回分页自动生成的响应,第1、2种可以适用两种返回形式，第3种分页，只适合以下返回形式
         return pagination.get_paginated_response(data=serializer.data)
 
-        # return Response(data=serializer.data)
