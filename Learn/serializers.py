@@ -18,6 +18,17 @@ class RoleSerializer(serializers.Serializer):
     title = serializers.CharField()
 
 
+class RoleSerializer2(serializers.ModelSerializer):
+    """
+    分页序列化类
+    """
+
+    class Meta:
+
+        model = Role
+        fields = '__all__'
+
+
 # ============================================================
 # 用户信息序列化类
 # ============================================================
@@ -151,16 +162,3 @@ class GroupSerializer2(serializers.ModelSerializer):
         field = ['id', 'title']
         # fields = '__all__'
 
-
-# ====================================================================
-# 分页序列化类
-# ====================================================================
-class PagerSerializer(serializers.ModelSerializer):
-    """
-    分页序列化类
-    """
-
-    class Meta:
-
-        model = Role
-        fields = '__all__'

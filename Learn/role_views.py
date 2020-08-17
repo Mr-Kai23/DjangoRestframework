@@ -36,7 +36,7 @@ class RoleView(APIView):
 # ===========================================================
 # 分页视图
 # ===========================================================
-from .serializers import PagerSerializer
+from .serializers import RoleSerializer, RoleSerializer2
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination, CursorPagination
 
 
@@ -99,7 +99,8 @@ class Pager1View(APIView):
         pager_roles = pagination.paginate_queryset(queryset=roles, request=request, view=self)
 
         # 序列化分页后的数据
-        serializer = PagerSerializer(instance=pager_roles, many=True)
+        # serializer = RoleSerializer(instance=pager_roles, many=True)
+        serializer = RoleSerializer2(instance=pager_roles, many=True)
 
         # 返回分页自动生成的响应,第1、2种可以适用两种返回形式，第3种分页，只适合以下返回形式
         return pagination.get_paginated_response(data=serializer.data)
