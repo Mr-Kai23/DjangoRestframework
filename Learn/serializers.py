@@ -40,8 +40,8 @@ class UserInfoSerializer(serializers.Serializer):
         :param row: 当前行的对象
         :return:
         """
-        # 当前行获取rls的所有值
-        role_obj_list = row.rls.all()
+        # 当前行获取roles(与模型中字段一致)的所有值
+        role_obj_list = row.roles.all()
         res = []
 
         for role in role_obj_list:
@@ -60,7 +60,7 @@ class UserInfoSerializer2(serializers.ModelSerializer):
     # view_name: 表示关联到视图group-list
     # lookup_field: 表示拿到数据，group_id:表示是外键group关联对象的id
     # lookup_url_kwarg: 定义的是url中的参数名
-    group = serializers.HyperlinkedIdentityField(view_name='group-list', lookup_field='group', lookup_url_kwarg='pk')
+    group = serializers.HyperlinkedIdentityField(view_name='group-list', lookup_field='group_id', lookup_url_kwarg='pk')
 
     # group = serializers.SerializerMethodField()
     #
@@ -116,6 +116,20 @@ class GroupSerializer(serializers.Serializer):
     """
     # validators: 自定义验证规则
     title = serializers.CharField(error_messages={'required': '标题不能为空！'}, validators=[PasswordValidator('老男人')])  # 数据校验
+
+    def validate_title(self, value):
+        """
+        可以自己定义验证方法，名字为 validate_+字段名
+        :param value: 使用的时候实例化时，传入的数据
+        :return: 验证处理后的数据或触发一个异常
+        """
+        # 1.返回验证后的值
+        # return value
+
+        # 2.触发异常，
+        from rest_framework.exceptions import ValidationError
+
+        raise ValidationError('验证有误')
 
 
 class GroupSerializer2(serializers.ModelSerializer):
