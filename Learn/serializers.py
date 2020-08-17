@@ -7,6 +7,9 @@ from .models import UserGroup, Role, User
 # 2.对数据进行验证
 
 
+# =============================================================
+# 角色序列化类
+# =============================================================
 class RoleSerializer(serializers.Serializer):
     """
     角色序列化类
@@ -15,6 +18,9 @@ class RoleSerializer(serializers.Serializer):
     title = serializers.CharField()
 
 
+# ============================================================
+# 用户信息序列化类
+# ============================================================
 class UserInfoSerializer(serializers.Serializer):
     """
     用户信息序列化类
@@ -107,6 +113,9 @@ class UserInfoSerializer2(serializers.ModelSerializer):
         # depth = 1
 
 
+# =============================================================
+# 用户组序列化类
+# =============================================================
 from .validators import PasswordValidator
 
 
@@ -141,3 +150,17 @@ class GroupSerializer2(serializers.ModelSerializer):
         model = UserGroup
         field = ['id', 'title']
         # fields = '__all__'
+
+
+# ====================================================================
+# 分页序列化类
+# ====================================================================
+class PagerSerializer(serializers.ModelSerializer):
+    """
+    分页序列化类
+    """
+
+    class Meta:
+
+        model = Role
+        fields = '__all__'

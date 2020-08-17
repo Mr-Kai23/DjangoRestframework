@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
         '登录用户': '10/m',
     },
 
-    'PAGE_SIZE': 10,  # 添加分页
+    'PAGE_SIZE': 2,  # 添加分页
 
     # 配置版本处理类参数
     'DEFAULT_VERSION': 'v1',

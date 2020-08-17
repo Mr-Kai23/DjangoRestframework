@@ -31,3 +31,29 @@ class RoleView(APIView):
         # return Response(serializer.data, status=status.HTTP_200_OK)
 
         return HttpResponse(res1)
+
+
+# ===========================================================
+# 分页视图
+# ===========================================================
+from .serializers import PagerSerializer
+from rest_framework.pagination import PageNumberPagination
+
+
+class Pager1View(APIView):
+    """
+    分页视图
+    """
+    def get(self, request, *args, **kwargs):
+
+        roles = Role.objects.all()
+
+        # 分页实例
+        pagination = PageNumberPagination()
+        # 传入 queryset 、 请求 对象 和 视图对象（也就是当前视图对象，self）(可写可不写)
+        pager_roles = pagination.paginate_queryset(queryset=roles, request=request, view=self)
+
+        # 序列化分页后的数据
+        serializer = PagerSerializer(instance=pager_roles, many=True)
+
+        return Response(serializer.data)
