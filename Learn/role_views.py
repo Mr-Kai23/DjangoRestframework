@@ -71,6 +71,7 @@ class MyCursorPagination(CursorPagination):
     """
     cursor_query_param = 'cursor'
     page_size = 2
+    ordering = 'id'  # 定义默认排序字段
     max_page_size = 8  # 最大每页数据数量
 
     page_size_query_param = None
@@ -89,11 +90,11 @@ class Pager1View(APIView):
         # pagination = PageNumberPagination()  # page参数：页码，size参数：单页数据量
         # pagination = MyPageNumberPagination()
         # 2.
-        # pagination = LimitOffsetPagination()  # offset参数：起始数据的索引，limit参数：单页面限定展示的数据量
+        pagination = LimitOffsetPagination()  # offset参数：起始数据的索引，limit参数：单页面限定展示的数据量
         # pagination = MyLimitOffsetPagination()
         # 3.
         # pagination = CursorPagination()
-        pagination = MyCursorPagination()
+        # pagination = MyCursorPagination()
 
         # 传入 queryset 、 请求 对象 和 视图对象（也就是当前视图对象，self）(可写可不写)
         pager_roles = pagination.paginate_queryset(queryset=roles, request=request, view=self)
