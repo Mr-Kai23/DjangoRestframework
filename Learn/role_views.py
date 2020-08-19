@@ -43,9 +43,10 @@ from rest_framework.pagination import PageNumberPagination, LimitOffsetPaginatio
 class MyPageNumberPagination(PageNumberPagination):
     """
     自定义分页配置类
+    重写一些配置项
     分页，看第n页，每页显示n条数据
     """
-    page_size = 2
+    page_size = 2  # 每页数据数量
     page_size_query_param = 'size'  # 路由中分页可传的参数，表示可以传一个size的参数，每个页面的数据量
     max_page_size = 8  # 最大每页数据数量
 
@@ -55,9 +56,10 @@ class MyPageNumberPagination(PageNumberPagination):
 class MyLimitOffsetPagination(LimitOffsetPagination):
     """
     自定义分页配置类
+    重写一些配置项
     分页，在n个位置，向后查看n条数据
     """
-    default_limit = 2
+    default_limit = 2  # 每页数据数量
     limit_query_param = 'limit'  # 每个页面的限定数据量参数
     max_limit = 8  # 最大每页数据数量
 
@@ -66,15 +68,16 @@ class MyLimitOffsetPagination(LimitOffsetPagination):
 
 class MyCursorPagination(CursorPagination):
     """
-    自定义分页配置类
+    自定义加密分页类
+    重写一些配置项
     分页，加密分页，上一页下一页
     """
-    cursor_query_param = 'cursor'
-    page_size = 2
+    cursor_query_param = 'cursor'  # 分页页码加密查询参数
+    page_size = 2  # 单页显示数据数量
     ordering = 'id'  # 定义默认排序字段
     max_page_size = 8  # 最大每页数据数量
 
-    page_size_query_param = None
+    page_size_query_param = 'size'  # 单页显示数据数量查询参数
 
 
 class Pager1View(APIView):
