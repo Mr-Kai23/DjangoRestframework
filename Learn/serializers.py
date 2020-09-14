@@ -2,7 +2,7 @@
 from rest_framework import serializers
 from .models import UserGroup, Role, User
 
-# 序列化：
+# 序列化功能：
 # 1.序列化数据
 # 2.对数据进行验证
 
