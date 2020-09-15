@@ -161,7 +161,7 @@ from rest_framework.views import APIView
 
 
 # 3.CBV继承APIView实现
-class SnippetsListView(APIView):
+class SnippetsListCreateView(APIView):
     """
     列出所有的snippets或者创建一个新的snippet。
     """

@@ -15,26 +15,26 @@ class RoleView(APIView):
     def get(self, request, *args, **kwargs):
 
         # 方法一：
-        # values()获取成字典形式，再将数据json.dumps()返回
-        # json.dumps()只能处理python的基本类型数据，不能直接处理queryset
-        roles = Role.objects.all().values('id', 'title')
-
-        # ensure_ascii=False，关闭自动将中文转码
-        res = json.dumps(list(roles), ensure_ascii=False)
+        # # values()获取成字典形式，再将数据json.dumps()返回
+        # # json.dumps()只能处理python的基本类型数据，不能直接处理queryset
+        # roles = Role.objects.all().values('id', 'title')
+        # # ensure_ascii=False，关闭自动将中文转码
+        # res = json.dumps(list(roles), ensure_ascii=False)
 
         # 方法二：
+        roles = Role.objects.all()
         serializer = RoleSerializer(instance=roles, many=True)
-        # serializer.data是一个有序字典
-        res1 = json.dumps(serializer.data, ensure_ascii=False)
 
         # 用 Response 不需要json.dumps()，因为 Response 中封装了序列化方法
-        # return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return HttpResponse(res1)
+        # serializer.data是一个有序字典
+        # res1 = json.dumps(serializer.data, ensure_ascii=False)
+        # return HttpResponse(res1)
 
 
 # =================================================================
-# 分页视图
+# 分页组件
 # =================================================================
 from .serializers import RoleSerializer, RoleSerializer2
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination, CursorPagination
@@ -111,3 +111,91 @@ class Pager1View(APIView):
         # 返回分页自动生成的响应,第1、2种可以适用两种返回形式，第3种分页，只适合以下返回形式
         return pagination.get_paginated_response(data=serializer.data)
 
+
+# =================================================================
+# 视图组件
+# 可以继承封装好了的增删改查类
+# =================================================================
+from rest_framework.generics import GenericAPIView
+from rest_framework.viewsets import GenericViewSet
+from .serializers import RoleSerializer2
+
+
+class View1View(GenericAPIView):
+    """
+    视图组建
+    """
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer2
+    pagination_class = MyPageNumberPagination
+
+    def get(self, request, *args, **kwargs):
+        """
+        列表
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # 获取queryset
+        roles = self.get_queryset()
+        # 分页数据
+        page_roles = self.paginate_queryset(roles)
+        # 序列化
+        ser = self.get_serializer(instance=page_roles, many=True)
+
+        return Response(data=ser.data, status=status.HTTP_200_OK)
+
+
+class View2View(GenericViewSet):
+    """
+    视图组建
+    """
+
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer2
+    pagination_class = MyPageNumberPagination
+
+    # ViewSetMixin中重写了as_view()
+    # 将对应方法映射为list方法
+    def list(self, request, *args, **kwargs):
+        """
+        列表
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # 获取queryset
+        roles = self.get_queryset()
+        # 分页数据
+        page_roles = self.paginate_queryset(roles)
+        # 序列化
+        ser = self.get_serializer(instance=page_roles, many=True)
+
+        return Response(data=ser.data, status=status.HTTP_200_OK)
+
+
+# =================================================================
+# 渲染器组件
+# =================================================================
+
+from rest_framework.renderers import JSONRenderer, BrowsableAPIRenderer, AdminRenderer
+
+
+class RenderView(APIView):
+    """
+    渲染器实现
+    """
+    # BrowsableAPIRenderer渲染成django后台页面显示数据
+    # Response中默认的渲染方式
+    # renderer_classes = [JSONRenderer, BrowsableAPIRenderer]
+    renderer_classes = [JSONRenderer, AdminRenderer]
+
+    def get(self, request, *args, **kwargs):
+
+        roles = Role.objects.all()
+        serializer = RoleSerializer(instance=roles, many=True)
+
+        # 用 Response 不需要json.dumps()，因为 Response 中封装了序列化方法
+        return Response(serializer.data, status=status.HTTP_200_OK)

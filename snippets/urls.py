@@ -24,7 +24,7 @@ urlpatterns = [
     url(r'^api/v1/detail/(?P<pk>[1-9]+)/$', views.snippet_detail1, name='snippet-detail'),
 
     # 3.
-    # url(r'^api/v1/list/$', views.SnippetsListView.as_view(), name='snippet-list'),
+    # url(r'^api/v1/list/$', views.SnippetsListCreateView.as_view(), name='snippet-list'),
     # url(r'^api/v1/detail/(?P<pk>[1-9]+)/$', views.SnippetsDetailView.as_view(), name='snippet-detail'),
 
     # 4.

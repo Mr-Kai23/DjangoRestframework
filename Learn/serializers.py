@@ -13,6 +13,7 @@ from .models import UserGroup, Role, User
 class RoleSerializer(serializers.Serializer):
     """
     角色序列化类
+    定义想要序列化的字段
     """
     id = serializers.IntegerField()
     title = serializers.CharField()
@@ -20,7 +21,8 @@ class RoleSerializer(serializers.Serializer):
 
 class RoleSerializer2(serializers.ModelSerializer):
     """
-    分页序列化类
+    角色序列化类
+    直接在元中定义所有字段
     """
 
     class Meta:
@@ -36,9 +38,9 @@ class UserInfoSerializer(serializers.Serializer):
     """
     用户信息序列化类
     """
-    # 有choice的字段，可以source指定用于填充usertype的内容
+    # 有choice的字段，可以source指定用于填充user_type的内容
     # user_type = serializers.IntegerField(source='user_type')
-    usertype = serializers.CharField(source='get_user_type_display')  # 不用加括号，源码中会执行
+    user_type = serializers.CharField(source='get_user_type_display')  # 不用加括号，源码中会执行
     username = serializers.CharField()
     password = serializers.CharField()
 
@@ -49,11 +51,11 @@ class UserInfoSerializer(serializers.Serializer):
     # 1.
     # roles = serializers.CharField(source='roles.all')  # 只能获取角色对象，不能获取到对象的具体信息
     # 2.
-    rls = serializers.SerializerMethodField()  # 自定义函数用于显示
+    roles = serializers.SerializerMethodField()  # 自定义函数用于显示
 
-    def get_rls(self, row):
+    def get_roles(self, row):
         """
-        定义名字为 get_+字段名（rls）的方法，用于自定义显示
+        定义名字为 get_+字段名（roles）的方法，用于自定义显示
         :param row: 当前行的对象
         :return:
         """
@@ -71,7 +73,7 @@ class UserInfoSerializer2(serializers.ModelSerializer):
     """
     用户信息序列化类
     """
-    usertype = serializers.CharField(source='get_user_type_display')
+    user_type = serializers.CharField(source='get_user_type_display')
 
     # 将group字段自定义为一个链接
     # view_name: 表示关联到视图group-list
@@ -94,11 +96,11 @@ class UserInfoSerializer2(serializers.ModelSerializer):
     #
     #     return ret
 
-    rls = serializers.SerializerMethodField()
+    roles = serializers.SerializerMethodField()
 
-    def get_rls(self, row):
+    def get_roles(self, row):
         """
-        定义名字为 get_+字段名（rls）的方法，用于自定义显示
+        定义名字为 get_+字段名（roles）的方法，用于自定义显示
         :param row: 当前行的对象
         :return:
         """
@@ -114,7 +116,7 @@ class UserInfoSerializer2(serializers.ModelSerializer):
         model = User
         # fields = '__all__'
         # 可以将上方定义的usertype当做字段写入列表中用于显示
-        fields = ['id', 'username', 'password', 'usertype', 'group', 'rls']
+        fields = ['id', 'username', 'password', 'user_type', 'group', 'rls']
         # 给列表中的 group字段加额外的参数，让 group 字段显示为组名
         # extra_kwargs = {'group': 'value'}
 
