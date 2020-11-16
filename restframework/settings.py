@@ -164,5 +164,13 @@ REST_FRAMEWORK = {
     'VERSION_PARAM': 'version',  # 版本参数的名字
 
     # 配置解析器处理类（路径）
-    'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser', 'rest_framework.parsers.FormParser']
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser'
+    ],
+    # 配置全局渲染器
+    'DEFAULT_RENDER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer'
+    ]
 }

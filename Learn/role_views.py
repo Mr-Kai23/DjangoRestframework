@@ -115,6 +115,7 @@ class Pager1View(APIView):
 # =================================================================
 # 视图组件
 # 可以继承封装好了的增删改查类
+# GenericViewSet比GenericAPIView中多封装了一个ViewSetMixin类，重写了as_view()
 # =================================================================
 from rest_framework.generics import GenericAPIView
 from rest_framework.viewsets import GenericViewSet
