@@ -50,7 +50,7 @@ class UserInfoSerializer(serializers.Serializer):
     # 用户关联的所有角色，ManyToMany字段
     # 1.
     # roles = serializers.CharField(source='roles.all')  # 只能获取角色对象，不能获取到对象的具体信息
-    # 2.
+    # 2. 用户信息中的roles字段
     roles = serializers.SerializerMethodField()  # 自定义函数用于显示
 
     def get_roles(self, row):
@@ -115,8 +115,8 @@ class UserInfoSerializer2(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = '__all__'
-        # 可以将上方定义的usertype当做字段写入列表中用于显示
-        fields = ['id', 'username', 'password', 'user_type', 'group', 'rls']
+        # 可以将上方定义的user_type当做字段写入列表中用于显示
+        fields = ['id', 'username', 'password', 'user_type', 'group', 'roles']
         # 给列表中的 group字段加额外的参数，让 group 字段显示为组名
         # extra_kwargs = {'group': 'value'}
 

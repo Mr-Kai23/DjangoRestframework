@@ -44,7 +44,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # url(r'^', include(router.urls)),
     # 可浏览API的登录和注销视图
-    path('api-auth/', include('rest_framework.urls')),
+    # path('api-auth/', include('rest_framework.urls')),
     path('snippets/', include('snippets.urls')),
     path('quickstart/', include('quickstart.urls')),
     path('learn/', include('Learn.urls'))

@@ -28,7 +28,7 @@ urlpatterns = [
 
     # 可以在路由上加格式化对结果进行格式化
     # http://127.0.0.1:8000/api/v1/group/1.json
-    url(r'^api/(?P<version>[v1|v2]+)/group/(?P<pk>\d+)\.(?P<format>\w+)/$', group_views.GroupView.as_view(), name='group-list'),
+    url(r'^api/(?P<version>[v1|v2]+)/group/(?P<pk>\d+)\.(?P<format>\w+)/$', group_views.GroupView.as_view(), name='group1-list'),
 
     url(r'^api/(?P<version>[v1|v2]+)/pager1/$', role_views.Pager1View.as_view(), name='pager1-list'),
 

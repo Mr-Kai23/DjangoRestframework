@@ -149,12 +149,12 @@ class UserInfoView(APIView):
         # 当序列化用了HyperlinkedIdentityField时，序列化时需要加上，context参数:传入请求对象
         # 当many=True时，源码内部将 users 交给 ListSerializer类 处理
         # 当many=False时，将 users 交给 UserInfoSerializer2类 处理
-        # serializer = UserInfoSerializer2(instance=users, many=True, context={'request': request})
-        serializer = UserInfoSerializer(instance=users, many=True)
+        serializer = UserInfoSerializer2(instance=users, many=True, context={'request': request})
+        # serializer = UserInfoSerializer(instance=users, many=True)
 
         # 2.调用对象的data属性
         #  # ensure_ascii=False，关闭自动将中文转码
         ret = json.dumps(serializer.data, ensure_ascii=False)
 
-        # return HttpResponse(ret)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return HttpResponse(ret)
+        # return Response(serializer.data, status=status.HTTP_200_OK)
